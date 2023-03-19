@@ -29,5 +29,5 @@ Run the DemoApplication.java class as it contains main() method.
 3. Lombok persists.
 4. Dependencies are set via @Autowired.
 5. SOLID principles are enabled.
-
+![SolidBankApp](https://github.com/singularity-camp/backend-2-solid-bank-app-AlmubdyMutaikhan/blob/main/solidbankapp2.PNG?raw=true)
 ## Enjoy your SolidBankApp2
