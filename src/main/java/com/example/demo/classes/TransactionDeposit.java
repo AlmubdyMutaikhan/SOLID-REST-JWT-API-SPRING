@@ -2,6 +2,7 @@ package com.example.demo.classes;
 
 import com.example.demo.interfaces.AccountDepositService;
 import com.example.demo.interfaces.TransactionDAO;
+import com.example.demo.repositories.TransactionRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,12 +16,13 @@ import java.util.UUID;
 public class TransactionDeposit {
 
     private AccountDepositService accountDepositService;
-    private TransactionDAO transactionDAO;
+    private TransactionRepository transactionRepository;
+
 
     @Autowired
-    public TransactionDeposit(AccountDepositService accountDepositService, TransactionDAO transactionDAO) {
+    public TransactionDeposit(AccountDepositService accountDepositService, TransactionRepository transactionRepository) {
             this.accountDepositService = accountDepositService;
-            this.transactionDAO = transactionDAO;
+            this.transactionRepository = transactionRepository;
     }
 
     public void execute(AccountWithdraw accountWithdraw, double balance) {
@@ -28,6 +30,6 @@ public class TransactionDeposit {
         String log = String.format("OK : %.2f$ has been deposited", balance);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        transactionDAO.addTransaction(new Transaction(dtf.format(now),log));
+        transactionRepository.save(new Transaction(dtf.format(now),log));
     }
 }

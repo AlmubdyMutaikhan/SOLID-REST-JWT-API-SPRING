@@ -25,7 +25,7 @@ public class TransactionWithdrawCLI {
        String accountID = withdrawDepositCLIUI.requestClientAccountNumber();
        double amount = withdrawDepositCLIUI.requestClientAmount();
        transactionWithdraw.execute(
-               (AccountWithdraw) accountListingService.getClientAccount(clientID, accountID),
+              accountListingService.getClientWithdrawAccount(clientID, accountID),
                amount
        );
 

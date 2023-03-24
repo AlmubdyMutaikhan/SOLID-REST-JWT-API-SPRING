@@ -2,6 +2,7 @@ package com.example.demo.classes;
 
 import com.example.demo.interfaces.AccountWithdrawService;
 import com.example.demo.interfaces.TransactionDAO;
+import com.example.demo.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,12 @@ import java.util.logging.Logger;
 public class TransactionWithdraw {
     private static final Logger LOGGER = Logger.getLogger(TransactionWithdraw.class.getName());
     private final AccountWithdrawService accountWithdrawService;
-    private final TransactionDAO transactionDAO;
+    private final TransactionRepository transactionRepository;
     @Autowired
     public TransactionWithdraw(AccountWithdrawService accountWithdrawService,
-                               TransactionDAO transactionDAO){
+                               TransactionRepository transactionRepository){
         this.accountWithdrawService = accountWithdrawService;
-        this.transactionDAO = transactionDAO;
+        this.transactionRepository = transactionRepository;
     }
 
     public void execute(AccountWithdraw accountWithdraw, double balance) {
@@ -29,7 +30,6 @@ public class TransactionWithdraw {
         String log = String.format("OK : %.2f$ has been withdrew", balance);
         LOGGER.setLevel(Level.INFO);
         LOGGER.info(log);
-
-        transactionDAO.addTransaction(new Transaction(dtf.format(now),log));
+        transactionRepository.save(new Transaction(dtf.format(now), log));
     }
 }

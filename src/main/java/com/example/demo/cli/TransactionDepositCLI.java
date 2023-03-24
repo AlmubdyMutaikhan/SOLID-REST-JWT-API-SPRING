@@ -32,7 +32,7 @@ public class TransactionDepositCLI {
     public void depositMoney(String clientID) {
        String accountID = withdrawDepositCLIUI.requestClientAccountNumber();
        double amount = withdrawDepositCLIUI.requestClientAmount();
-       transactionDeposit.execute((AccountWithdraw) accountListingService.getClientWithdrawAccount(clientID, accountID),
+       transactionDeposit.execute(accountListingService.getClientWithdrawAccount(clientID, accountID),
                amount);
     }
 }

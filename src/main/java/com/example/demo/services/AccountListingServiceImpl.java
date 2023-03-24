@@ -5,6 +5,7 @@ import com.example.demo.classes.AccountWithdraw;
 import com.example.demo.interfaces.AccountDAO;
 import com.example.demo.interfaces.AccountListingService;
 import com.example.demo.interfaces.AccountType;
+import com.example.demo.repositories.AccountRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,34 @@ import java.util.List;
 @Setter
 public class AccountListingServiceImpl implements AccountListingService {
     @Autowired
-    private AccountDAO accountDAO;
+    private AccountRepository accountRepository;
 
     @Override
     public Account getClientAccount(String clientID, String accountID) {
-       return accountDAO.getClientAccount(clientID, accountID);
+       return accountRepository.findClientAccount(accountID, clientID);
     }
 
     @Override
     public AccountWithdraw getClientWithdrawAccount(String clientID, String accountID) {
-        return accountDAO.getClientWithdrawAccount(clientID, accountID);
+        Account account =  accountRepository.findClientAccount(accountID, clientID);
+
+        return account == null ? null : new AccountWithdraw(
+                account.getAccountType(),
+                account.getId(),
+                account.getClientID(),
+                account.getBalance(),
+                account.isWithdrawAllowed()
+        );
     }
 
     @Override
     public List<Account> getClientAccounts(String clientID) {
-        return accountDAO.getClientAccounts(clientID);
+        return accountRepository.findAccountsByClientID(clientID);
     }
 
     @Override
     public List<Account> getClientAccountsByType(String clientID, AccountType accountType) {
-        return accountDAO.getClientAccountsByType(clientID, accountType);
+        return accountRepository.findAccountsByClientIDAndAccountType(clientID,
+                accountType.toString());
     }
 }

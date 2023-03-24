@@ -5,6 +5,7 @@ import com.example.demo.classes.AccountWithdraw;
 import com.example.demo.interfaces.AccountCreationService;
 import com.example.demo.interfaces.AccountDAO;
 import com.example.demo.interfaces.AccountType;
+import com.example.demo.repositories.AccountRepository;
 import lombok.AllArgsConstructor;
 import lombok.With;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountCreationServiceImpl implements AccountCreationService {
 
-    private final AccountDAO accountDAO;
     @Autowired
-    public AccountCreationServiceImpl(AccountDAO accountDAO) {
-        this.accountDAO = accountDAO;
-    }
+    private AccountRepository accountRepository;
 
 
     @Override
@@ -27,7 +25,7 @@ public class AccountCreationServiceImpl implements AccountCreationService {
         boolean withdrawAllowed = !accountType.equals(AccountType.FIXED);
         Account account = null;
         if(withdrawAllowed) {
-            account = new AccountWithdraw(accountType,
+            account = new Account(accountType,
                     String.format("%03d%06d", 1, accountID),
                     clientID, 0, true);
         } else {
@@ -35,6 +33,10 @@ public class AccountCreationServiceImpl implements AccountCreationService {
                     Long.toString(accountID),
                     clientID, 0, false);
         }
-        accountDAO.createNewAccount(account);
+        accountRepository.createAccount(account.getAccountType().toString(),
+                account.getId(),
+                account.getClientID(),
+                account.getBalance(),
+                account.isWithdrawAllowed());;
     }
 }

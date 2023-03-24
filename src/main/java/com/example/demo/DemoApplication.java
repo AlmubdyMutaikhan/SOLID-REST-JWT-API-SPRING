@@ -2,17 +2,21 @@ package com.example.demo;
 
 import com.example.demo.classes.Account;
 import com.example.demo.cli.*;
+import com.example.demo.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import java.util.List;
+
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	private ApplicationContext context;
-
+	@Autowired
+	private AccountRepository accountRepository;
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class);
 	}
@@ -35,7 +39,12 @@ public class DemoApplication implements CommandLineRunner {
 			switch(myCLI.getScanner().nextLine()){
 
 				case "1":
-					accountBasicCLI.getAccounts(clientID);
+					//accountBasicCLI.getAccounts(clientID);
+					Account a = accountRepository.findClientAccount("001000001", clientID);
+				//	System.out.println(a);
+					for(var i : accountRepository.findAccountsByClientIDAndAccountType(clientID, "SAVING")){
+						System.out.println(i);
+					}
 					break;
 
 				case "2":
