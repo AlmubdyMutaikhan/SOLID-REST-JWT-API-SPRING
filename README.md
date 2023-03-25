@@ -1,4 +1,4 @@
-#Project description
+# Project description
 ```
 Implementation of bank app enabled with JDBC usage, REST API handling and CLI program powered by SOLID principles.
 ```
