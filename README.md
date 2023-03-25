@@ -40,4 +40,4 @@ Go to http://localhost:8080/swagger-ui/index.html# to learn the REST API.
 7. Go to swagger via http://localhost:8080/swagger-ui/index.html#
 8. REST API
 ![SolidBankApp](https://github.com/singularity-camp/backend-2-solid-bank-app-AlmubdyMutaikhan/blob/main/solidbankapp2.PNG?raw=true)
-## Enjoy your SolidBankApp2
+## Enjoy your SolidBankApp
