@@ -1,5 +1,6 @@
 package com.example.demo.classes;
 
+import com.example.demo.excpetions.AccountOperationDenied;
 import com.example.demo.interfaces.AccountDepositService;
 import com.example.demo.interfaces.TransactionDAO;
 import com.example.demo.repositories.TransactionRepository;
@@ -26,10 +27,12 @@ public class TransactionDeposit {
     }
 
     public void execute(AccountWithdraw accountWithdraw, double balance) {
-        accountDepositService.deposit(balance, accountWithdraw);
+        int statusCode = accountDepositService.deposit(balance, accountWithdraw);
+        if(statusCode == -1) { throw  new AccountOperationDenied(accountWithdraw.getId(), balance);
+        }
         String log = String.format("OK : %.2f$ has been deposited", balance);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        transactionRepository.save(new Transaction(dtf.format(now),log));
+        transactionRepository.save(new Transaction(dtf.format(now),log, accountWithdraw.getId()));
     }
 }

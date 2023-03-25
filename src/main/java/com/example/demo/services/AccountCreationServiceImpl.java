@@ -30,7 +30,7 @@ public class AccountCreationServiceImpl implements AccountCreationService {
                     clientID, 0, true);
         } else {
             account = new Account(accountType,
-                    Long.toString(accountID),
+                    String.format("%03d%06d", 1, accountID),
                     clientID, 0, false);
         }
         accountRepository.createAccount(account.getAccountType().toString(),

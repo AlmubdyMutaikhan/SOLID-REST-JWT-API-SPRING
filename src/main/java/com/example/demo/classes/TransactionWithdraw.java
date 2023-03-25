@@ -1,5 +1,6 @@
 package com.example.demo.classes;
 
+import com.example.demo.excpetions.AccountOperationDenied;
 import com.example.demo.interfaces.AccountWithdrawService;
 import com.example.demo.interfaces.TransactionDAO;
 import com.example.demo.repositories.TransactionRepository;
@@ -24,12 +25,15 @@ public class TransactionWithdraw {
     }
 
     public void execute(AccountWithdraw accountWithdraw, double balance) {
-        accountWithdrawService.withdraw(balance, accountWithdraw);
+        int statusCode = accountWithdrawService.withdraw(balance, accountWithdraw);
+        if(statusCode == -1) {
+            throw new AccountOperationDenied(accountWithdraw.getId(), balance);
+        }
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String log = String.format("OK : %.2f$ has been withdrew", balance);
         LOGGER.setLevel(Level.INFO);
         LOGGER.info(log);
-        transactionRepository.save(new Transaction(dtf.format(now), log));
+        System.out.println(transactionRepository.save(new Transaction(dtf.format(now), log, accountWithdraw.getId())));
     }
 }

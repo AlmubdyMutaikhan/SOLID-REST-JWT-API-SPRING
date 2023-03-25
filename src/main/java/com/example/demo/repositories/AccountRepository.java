@@ -25,9 +25,13 @@ public interface AccountRepository extends CrudRepository<Account, String> {
     List<Account> findAccountsByClientIDAndAccountType(String clientID,
                                                        String accountType);
     @Modifying
-    @Query("UPDATE Account A SET A.BALANCE=:amount WHERE A.ID=:aid")
+    @Query("UPDATE Account A SET A.BALANCE=:amount WHERE A.ACCOUNT_TYPE!='FIXED' AND A.ID=:aid")
     int updateBalance(@Param("amount") double amount,
                      @Param("aid") String aid);
+
+    @Modifying
+    @Query("DELETE FROM Account WHERE ID=:aid")
+    int deleteAccountById(String aid);
 
 
 }

@@ -18,15 +18,16 @@ public class AccountWithdrawServiceImpl implements AccountWithdrawService {
 
     }
     @Override
-    public void withdraw(double amount, AccountWithdraw account) {
+    public int withdraw(double amount, AccountWithdraw account) {
         boolean isWithdrawAccepted = amount > 0 && (account.getBalance() - amount) >= 0.0;
         if(isWithdrawAccepted) {
             account.setBalance(account.getBalance() - amount);
             accountRepository.updateBalance(account.getBalance(),
                     account.getId());
-
+            return 0;
         } else {
             System.out.println("ERROR: Not enough money or invalid money value");
+            return -1;
         }
     }
 

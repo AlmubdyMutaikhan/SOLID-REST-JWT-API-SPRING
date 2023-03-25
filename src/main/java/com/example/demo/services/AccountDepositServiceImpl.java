@@ -20,22 +20,18 @@ public class AccountDepositServiceImpl implements AccountDepositService {
         this.accountRepository = accountRepository;
     }
 
-    public void deposit(double amount, AccountWithdraw accountWithdraw) {
+    public int deposit(double amount, AccountWithdraw accountWithdraw) {
         if(accountWithdraw != null){
             boolean isDepositAccepted = amount > 0;
             if(isDepositAccepted){
                 accountWithdraw.setBalance(accountWithdraw.getBalance() + amount);
-                logger.log(Level.INFO, String.format("Successfully transferred %.2f$ to account(ID=%s)",
-                        amount,
-                        accountWithdraw.getClientID()));
-               // System.out.println(accountWithdraw.ge);
                 int a = accountRepository.updateBalance(accountWithdraw.getBalance(), accountWithdraw.getId());
-                System.out.println(a);
+                return a != 0 ? 0 : -1;
             }
         } else {
             logger.log(Level.WARNING, "NOK : Withdraw isn't allowed");
+            return -1;
         }
-
-
+        return  -1;
     }
 }

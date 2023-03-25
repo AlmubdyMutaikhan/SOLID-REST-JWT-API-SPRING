@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.classes.Account;
 import com.example.demo.classes.AccountWithdraw;
+import com.example.demo.excpetions.AccountNotFound;
 import com.example.demo.interfaces.AccountDAO;
 import com.example.demo.interfaces.AccountListingService;
 import com.example.demo.interfaces.AccountType;
@@ -22,20 +23,29 @@ public class AccountListingServiceImpl implements AccountListingService {
 
     @Override
     public Account getClientAccount(String clientID, String accountID) {
-       return accountRepository.findClientAccount(accountID, clientID);
+       Account account = accountRepository.findClientAccount(accountID, clientID);
+        if(account == null) {
+            throw new AccountNotFound(accountID);
+        } else {
+            return account;
+        }
     }
 
     @Override
     public AccountWithdraw getClientWithdrawAccount(String clientID, String accountID) {
         Account account =  accountRepository.findClientAccount(accountID, clientID);
+        if(account == null) {
+            throw new AccountNotFound(accountID);
+        } else {
+            return new AccountWithdraw(
+                    account.getAccountType(),
+                    account.getId(),
+                    account.getClientID(),
+                    account.getBalance(),
+                    account.isWithdrawAllowed()
+            );
+        }
 
-        return account == null ? null : new AccountWithdraw(
-                account.getAccountType(),
-                account.getId(),
-                account.getClientID(),
-                account.getBalance(),
-                account.isWithdrawAllowed()
-        );
     }
 
     @Override

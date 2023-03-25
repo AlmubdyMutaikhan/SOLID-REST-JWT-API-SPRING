@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class TransactionBasicCLI {
@@ -22,7 +23,7 @@ public class TransactionBasicCLI {
         return transactionListingService.getAllTransactions();
     }
 
-    public Transaction getByID(String UUID) {
+    public List<Transaction> getByID(String UUID) {
         return transactionListingService.getTransactionByID(UUID);
     }
 
