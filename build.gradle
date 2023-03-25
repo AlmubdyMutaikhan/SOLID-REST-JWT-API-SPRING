@@ -21,6 +21,8 @@ dependencies {
 	runtimeOnly group: 'com.h2database', name: 'h2', version: '2.1.214'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: '3.0.4'
 	implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.1'
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.4'
+
 
 }
 
