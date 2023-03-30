@@ -8,6 +8,8 @@ import com.example.demo.interfaces.AccountDepositService;
 import com.example.demo.interfaces.AccountListingService;
 import com.example.demo.interfaces.AccountWithdrawService;
 import com.example.demo.interfaces.TransactionListingService;
+import com.example.demo.services.TokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,20 +29,26 @@ public class AccountOperationController {
     private record ResMessage(String name, String desc) {}
     @Autowired
     private TransactionListingService transactionListingService;
-
+    @Autowired
+    private TokenService tokenService;
     @PostMapping("/accounts/{id}/deposit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public  ResMessage depositMoney(@PathVariable String id, @RequestBody Money money) {
-           transactionDeposit.execute(accountListingService.getClientWithdrawAccount("1", id),
+    public  ResMessage depositMoney(HttpServletRequest http,
+                                    @PathVariable String id,
+                                    @RequestBody Money money) {
+        String username = tokenService.decodeToken(http);
+        transactionDeposit.execute(accountListingService
+                        .getClientWithdrawAccount(username, id),
                    money.amount());
             return new ResMessage("message", String.format("%f$ deposited to account id=%s", money.amount(),
                     id));
     }
     @PostMapping("/accounts/{id}/withdraw")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public  ResMessage withdrawMoney(@PathVariable String id, @RequestBody Money money) {
+    public  ResMessage withdrawMoney(HttpServletRequest http, @PathVariable String id, @RequestBody Money money) {
+        String username = tokenService.decodeToken(http);
         transactionWithdraw.execute(
-                accountListingService.getClientWithdrawAccount("1", id),
+                accountListingService.getClientWithdrawAccount(username, id),
                 money.amount()
         );
         return new ResMessage("message", String.format("%f$ withdrew from account id=%s", money.amount(),
@@ -48,7 +56,8 @@ public class AccountOperationController {
     }
 
     @GetMapping("/accounts/{id}/transactions")
-    public List<Transaction> getTransactions(@PathVariable String id) {
+    public List<Transaction> getTransactions(HttpServletRequest http, @PathVariable String id) {
+        String username = tokenService.decodeToken(http);
         return transactionListingService.getTransactionByID(id);
     }
 

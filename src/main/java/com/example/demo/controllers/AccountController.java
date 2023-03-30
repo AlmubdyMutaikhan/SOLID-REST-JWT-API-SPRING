@@ -37,7 +37,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accounts_id}")
-    public Account getAccountById(HttpServletRequest http, @PathVariable String accounts_id) throws JsonProcessingException {
+    public Account getAccountById(HttpServletRequest http, @PathVariable String accounts_id) {
         String token = http.getHeader("authorization").substring(7);
         //{"iss":"self","sub":"ali","exp":1680164355,"iat":1680160755,"scope":"BANK CLIENT"}
         String username = tokenService.decodeToken(http);
