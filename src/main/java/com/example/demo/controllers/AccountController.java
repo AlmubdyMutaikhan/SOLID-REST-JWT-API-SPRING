@@ -6,6 +6,8 @@ import com.example.demo.interfaces.AccountCreationService;
 import com.example.demo.interfaces.AccountListingService;
 import com.example.demo.interfaces.AccountType;
 import com.example.demo.services.AccountRemovingServiceImpl;
+import com.example.demo.services.TokenService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +25,8 @@ public class AccountController {
     private BankCore bankCore;
     @Autowired
     private AccountRemovingServiceImpl accountRemovingService;
-
+    @Autowired
+    private TokenService tokenService;
     @GetMapping("")
     @ResponseBody
     public List<Account> getAllAccounts() {
@@ -31,8 +34,13 @@ public class AccountController {
     }
 
     @GetMapping("/{accounts_id}")
-    public Account getAccountById(HttpServletRequest http, @PathVariable String accounts_id) {
-        System.out.println(http.getHeader("authorization").substring(7));
+    public Account getAccountById(HttpServletRequest http, @PathVariable String accounts_id) throws JsonProcessingException {
+        String token = http.getHeader("authorization").substring(7);
+        //{"iss":"self","sub":"ali","exp":1680164355,"iat":1680160755,"scope":"BANK CLIENT"}
+        String payload = tokenService.decodeToken(token);
+        payload = payload.split(",")[1].split(":")[1];
+        payload = payload.substring(1, payload.length() - 1);
+        System.out.println(payload);
         return accountListingService.getClientAccount("1", accounts_id);
     }
     private record ResMessage(String name, String desc) {}

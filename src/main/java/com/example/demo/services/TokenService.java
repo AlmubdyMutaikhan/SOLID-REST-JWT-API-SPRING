@@ -1,7 +1,10 @@
 package com.example.demo.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.swagger.v3.core.util.Json;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +25,19 @@ import java.util.stream.Collectors;
 public class TokenService {
 
     private final JwtEncoder encoder;
-
+ private final static String SECRET_KEY = "secretss3248932wefjnewdsfjasd.fmvndsl.fcmaslz.vknsald/qwma;'fwedsaflkdas";
     public TokenService(JwtEncoder encoder) {
         this.encoder = encoder;
+    }
+
+    public String decodeToken(String token) {
+        String[] chunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+
+        String header = new String(decoder.decode(chunks[0]));
+        String payload = new String(decoder.decode(chunks[1]));
+
+        return payload;
     }
 
     public String generateToken(Authentication authentication) {
