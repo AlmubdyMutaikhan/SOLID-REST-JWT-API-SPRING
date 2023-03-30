@@ -6,6 +6,13 @@ CREATE TABLE Account(
                         WITHDRAW_ALLOWED BOOLEAN NOT NULL
 );
 
+CREATE TABLE Client(
+                        ID int auto_increment primary key NOT NULL,
+                        USERNAME NVARCHAR(100) NOT NULL,
+                        PWD NVARCHAR(100) NOT NULL
+);
+
+INSERT INTO Client(USERNAME, PWD) VALUES ('ali','stanford');
 
 INSERT INTO Account VALUES ('SAVING', '0001001', '10', 150.0, TRUE);
 INSERT INTO Account VALUES ('SAVING', '0001002', '18', 10.0, TRUE);

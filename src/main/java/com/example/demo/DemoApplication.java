@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoApplication  {
 	@GetMapping("/")
 	public String hello() {
-		return "Solid bank app project. Version 4 is under maintenance.";
+		return "Welcome to Stanford, Almubdi!";
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

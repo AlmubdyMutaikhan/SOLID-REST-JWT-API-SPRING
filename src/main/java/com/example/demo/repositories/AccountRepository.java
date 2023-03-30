@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 
+
 public interface AccountRepository extends CrudRepository<Account, String> {
     @Modifying
     @Query("INSERT INTO Account VALUES (:type, :id, :cid, :balance, :wa)")
