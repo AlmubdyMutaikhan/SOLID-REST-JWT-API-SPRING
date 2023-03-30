@@ -6,6 +6,7 @@ import com.example.demo.interfaces.AccountCreationService;
 import com.example.demo.interfaces.AccountListingService;
 import com.example.demo.interfaces.AccountType;
 import com.example.demo.services.AccountRemovingServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,12 @@ public class AccountController {
     @GetMapping("")
     @ResponseBody
     public List<Account> getAllAccounts() {
-        return accountListingService.getClientAccounts("1");
+        return accountListingService.getClientAccounts("");
     }
 
     @GetMapping("/{accounts_id}")
-    public Account getAccountById(@PathVariable String accounts_id) {
+    public Account getAccountById(HttpServletRequest http, @PathVariable String accounts_id) {
+        System.out.println(http.getHeader("authorization").substring(7));
         return accountListingService.getClientAccount("1", accounts_id);
     }
     private record ResMessage(String name, String desc) {}
