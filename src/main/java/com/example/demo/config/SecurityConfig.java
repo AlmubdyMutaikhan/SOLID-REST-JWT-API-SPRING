@@ -29,6 +29,7 @@ public class SecurityConfig {
         return http.authorizeHttpRequests()
                 .requestMatchers("/v3/api-docs/**", "/client/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // разрешить доступ всем
                 .requestMatchers("/authenticate").authenticated() // любой запрос требует авторизации
+                .anyRequest().permitAll()
                 .and()
                 .httpBasic() // Basic аутентификация
                 .and()
