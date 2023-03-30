@@ -1,10 +1,12 @@
 package com.example.demo.services;
 
+import com.example.demo.excpetions.TokenInvalid;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.v3.core.util.Json;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -30,15 +32,26 @@ public class TokenService {
         this.encoder = encoder;
     }
 
-    public String decodeToken(String token) {
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
+    public String decodeToken(HttpServletRequest http) {
 
-        String header = new String(decoder.decode(chunks[0]));
-        String payload = new String(decoder.decode(chunks[1]));
+        try {
+            String token = http.getHeader("authorization");
 
-        return payload;
+            if(token == null){throw new TokenInvalid("Token doesn't exist");}
+            token =  token.substring(7);
+            String[] chunks = token.split("\\.");
+            Base64.Decoder decoder = Base64.getUrlDecoder();
+            String payload = new String(decoder.decode(chunks[1]));
+            payload = payload.split(",")[1].split(":")[1];
+            payload = payload.substring(1, payload.length() - 1);
+            return payload;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new TokenInvalid(e.getMessage());
+        }
     }
+
+
 
     public String generateToken(Authentication authentication) {
         Instant now = Instant.now();
