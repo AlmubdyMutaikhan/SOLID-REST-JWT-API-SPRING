@@ -15,7 +15,7 @@ public class ClientController {
     ClientRepository clientRepository;
     @PostMapping("/new")
     public String createNewClient(@RequestBody ClientRequest client) {
-        clientRepository.save(new Client(client.username(), client.pwd()));
+        clientRepository.createClient(client.username(), client.pwd());
         return "user created";
     }
 
